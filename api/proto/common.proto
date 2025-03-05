@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package common;
+
+option go_package = "goggles/api/proto;common";
+
+// Общее пустое сообщение для использования в разных сервисах
+message Empty {}

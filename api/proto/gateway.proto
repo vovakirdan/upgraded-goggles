@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package gateway;
+
+import "google/api/annotations.proto";
+
+option go_package = "goggles/api/proto;gateway";
+
+// Сервис для API Gateway, здесь можно добавить общие или агрегированные эндпоинты
+service APIGateway {
+    rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse) {
+        option (google.api.http) = {
+            get: "/health"
+        };
+    }
+}
+
+// Запрос для проверки работоспособности сервиса
+message HealthCheckRequest {}
+
+// Ответ проверки работоспособности сервиса
+message HealthCheckResponse {
+    string status = 1;
+}

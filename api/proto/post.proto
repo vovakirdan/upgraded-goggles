@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package post;
+
+import "google/protobuf/timestamp.proto";
+import "google/api/annotations.proto";
+
+option go_package = "goggles/api/proto;post";
+
+// Сообщение поста
+message Post {
+    int64 id = 1;
+    int64 user_id = 2;
+    string title = 3;
+    string content = 4;
+    google.protobuf.Timestamp created_at = 5;
+}
+
+// Запрос на создание поста
+message CreatePostRequest {
+    int64 user_id = 1;
+    string title = 2;
+    string content = 3;
+}
+
+// Ответ на создание поста
+message CreatePostResponse {
+    Post post = 1;
+}
+
+// Запрос на получение поста
+message GetPostRequest {
+    int64 id = 1;
+}
+
+// Ответ на получение поста
+message GetPostResponse {
+    Post post = 1;
+}
+
+// Запрос на обновление поста
+message UpdatePostRequest {
+    int64 id = 1;
+    string title = 2;
+    string content = 3;
+}
+
+// Ответ на обновление поста
+message UpdatePostResponse {
+    Post post = 1;
+}
+
+// Запрос на удаление поста
+message DeletePostRequest {
+    int64 id = 1;
+}
+
+// Ответ на удаление поста
+message DeletePostResponse {
+    string message = 1;
+}
+
+// Сервис для управления постами
+service PostService {
+    rpc CreatePost(CreatePostRequest) returns (CreatePostResponse) {
+        option (google.api.http) = {
+            post: "/v1/posts"
+            body: "*"
+        };
+    }
+    rpc GetPost(GetPostRequest) returns (GetPostResponse) {
+        option (google.api.http) = {
+            get: "/v1/posts/{id}"
+        };
+    }
+    rpc UpdatePost(UpdatePostRequest) returns (UpdatePostResponse) {
+        option (google.api.http) = {
+            put: "/v1/posts/{id}"
+            body: "*"
+        };
+    }
+    rpc DeletePost(DeletePostRequest) returns (DeletePostResponse) {
+        option (google.api.http) = {
+            delete: "/v1/posts/{id}"
+        };
+    }
+}
