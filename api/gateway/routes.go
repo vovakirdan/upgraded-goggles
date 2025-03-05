@@ -1,4 +1,4 @@
-package routes
+package gateway
 
 import (
 	"context"
@@ -6,16 +6,14 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
-	"user-post-system/api/gateway/config"
 
-	// Импорт сгенерированных gRPC клиентов
-	userpb "user-post-system/api/proto/user"
-	postpb "user-post-system/api/proto/post"
-	gatewaypb "user-post-system/api/proto/gateway"
+	userpb "upgraded-goggles/api/proto/user"
+	postpb "upgraded-goggles/api/proto/post"
+	gatewaypb "upgraded-goggles/api/proto/gateway"
 )
 
 // RegisterRoutes регистрирует маршруты для gRPC-сервисов в gRPC Gateway mux.
-func RegisterRoutes(ctx context.Context, mux *runtime.ServeMux, cfg *config.Config, opts []grpc.DialOption) error {
+func RegisterRoutes(ctx context.Context, mux *runtime.ServeMux, cfg *Config, opts []grpc.DialOption) error {
 	// Регистрация маршрута для UserService
 	err := userpb.RegisterUserServiceHandlerFromEndpoint(ctx, mux, cfg.UserServiceAddress, opts)
 	if err != nil {

@@ -1,8 +1,9 @@
-module goggles
+module upgraded-goggles
 
 go 1.23.5
 
 require (
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.26.3
 	github.com/lib/pq v1.10.9
 	google.golang.org/grpc v1.71.0
