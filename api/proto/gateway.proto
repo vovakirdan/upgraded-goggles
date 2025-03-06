@@ -4,7 +4,7 @@ package gateway;
 
 import "google/api/annotations.proto";
 
-option go_package = "goggles/api/proto;gateway";
+option go_package = "upgraded-goggles/api/proto/gateway;gateway";
 
 // Сервис для API Gateway, здесь можно добавить общие или агрегированные эндпоинты
 service APIGateway {
