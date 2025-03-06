@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: dbname
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  user_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: user-service
+    environment:
+      DATABASE_URL: "postgres://user:password@db:5432/dbname?sslmode=disable"
+      HTTP_PORT: ":50051"
+    depends_on:
+      - db
+    ports:
+      - "50051:50051"
+
+  post_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: post-service
+    environment:
+      DATABASE_URL: "postgres://user:password@db:5432/dbname?sslmode=disable"
+      HTTP_PORT: ":50052"
+    depends_on:
+      - db
+    ports:
+      - "50052:50052"
+
+  api_gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: api-gateway
+    environment:
+      HTTP_PORT: ":8080"
+      USER_SERVICE_ADDRESS: "user_service:50051"
+      POST_SERVICE_ADDRESS: "post_service:50052"
+      GATEWAY_ADDRESS: "api_gateway:50053"  # используется для HealthCheck
+    depends_on:
+      - user_service
+      - post_service
+    ports:
+      - "8080:8080"
+
+volumes:
+  db_data:
