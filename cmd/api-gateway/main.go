@@ -31,28 +31,33 @@ func main() {
 	}
 
 	// Создаем gRPC Gateway mux
-	mux := runtime.NewServeMux()
+	runtimeMux := runtime.NewServeMux()
 
 	// Опции для подключения к gRPC-сервисам
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	// Регистрируем маршруты для gRPC-сервисов
-	err = gateway.RegisterRoutes(ctx, mux, cfg, opts)
+	err = gateway.RegisterRoutes(ctx, runtimeMux, cfg, opts)
 	if err != nil {
 		log.Fatalf("failed to register routes: %v", err)
 	}
 
+	// Оборачиваем runtimeMux в AuthMiddleware и LoggingMiddleware.
+    //    Все пути (кроме swagger) будут через авторизацию и логирование.
+    wrappedGateway := gateway.AuthMiddleware(runtimeMux)
+    wrappedGateway = logger.LoggingMiddleware(wrappedGateway)
+
+	// Создаем новый http.ServeMux (назовем его httpMux)
+    httpMux := http.NewServeMux()
+
 	// Обслуживание статических файлов Swagger (доступно по /swagger/)
-	http.Handle("/swagger/", http.StripPrefix("/swagger/", http.FileServer(http.Dir("api/gateway/swagger"))))
+	httpMux.Handle("/swagger/", http.StripPrefix("/swagger/", http.FileServer(http.Dir("api/gateway/swagger"))))
 
-	// Оборачиваем mux авторизационным middleware
-	handler := gateway.AuthMiddleware(mux)
-
-	// Оборачиваем handler middleware логирования.
-	handler = logger.LoggingMiddleware(handler)
+	// Все остальные запросы ("/") передаем в wrappedGateway
+	httpMux.Handle("/", wrappedGateway)
 
 	log.Printf("Starting API Gateway at %s", cfg.HTTPPort)
-	if err := http.ListenAndServe(cfg.HTTPPort, handler); err != nil {
+	if err := http.ListenAndServe(cfg.HTTPPort, httpMux); err != nil {
 		log.Fatalf("failed to start server: %v", err)
 	}
 }
