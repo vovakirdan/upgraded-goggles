@@ -1,5 +1,5 @@
 # user-post-service: User & Post Management Service
-
+> [Документация на Русском](README.ru.md)
 ## Table of Contents
 - [Introduction](#introduction)
 - [Project Structure](#project-structure)
