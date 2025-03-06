@@ -5,7 +5,7 @@ package user;
 import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
 
-option go_package = "upgraded-goggles/api/proto/user;user";
+option go_package = "upgraded-goggles/api/proto/user";
 
 // Сообщение пользователя
 message User {

@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 
-	userpb "upgraded-goggles/api/proto/user"
-	postpb "upgraded-goggles/api/proto/post"
 	gatewaypb "upgraded-goggles/api/proto/gateway"
+	postpb "upgraded-goggles/api/proto/post"
+	userpb "upgraded-goggles/api/proto/user"
 )
 
 // RegisterRoutes регистрирует маршруты для gRPC-сервисов в gRPC Gateway mux.

@@ -7,8 +7,9 @@ import (
 
 	"upgraded-goggles/internal/logger"
 
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 // Run запускает API Gateway
@@ -32,7 +33,7 @@ func Run() {
 	mux := runtime.NewServeMux()
 
 	// Опции для подключения к gRPC-сервисам
-	opts := []grpc.DialOption{grpc.WithInsecure()}
+	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	// Регистрируем маршруты для gRPC-сервисов
 	err = RegisterRoutes(ctx, mux, cfg, opts)
@@ -48,7 +49,7 @@ func Run() {
 
 	// Оборачиваем handler middleware логирования.
 	handler = logger.LoggingMiddleware(handler)
-	
+
 	log.Printf("Starting API Gateway at %s", cfg.HTTPPort)
 	if err := http.ListenAndServe(cfg.HTTPPort, handler); err != nil {
 		log.Fatalf("failed to start server: %v", err)

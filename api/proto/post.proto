@@ -5,7 +5,7 @@ package post;
 import "google/protobuf/timestamp.proto";
 import "google/api/annotations.proto";
 
-option go_package = "upgraded-goggles/api/proto/post;post";
+option go_package = "upgraded-goggles/api/proto/post";
 
 // Сообщение поста
 message Post {
