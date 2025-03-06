@@ -6,6 +6,7 @@ paths:
   /v1/users/register:
     post:
       summary: Register a new user
+      security: []
       requestBody:
         required: true
         content:
@@ -22,6 +23,7 @@ paths:
   /v1/users/login:
     post:
       summary: User login
+      security: []
       requestBody:
         required: true
         content:
@@ -126,6 +128,7 @@ paths:
   /health:
     get:
       summary: Health Check
+      security: []
       responses:
         '200':
           description: Service is healthy
@@ -137,6 +140,11 @@ paths:
                   status:
                     type: string
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     RegisterRequest:
       type: object
@@ -242,3 +250,5 @@ components:
         created_at:
           type: string
           format: date-time
+security:
+  - BearerAuth: []

@@ -15,12 +15,19 @@ var secretKey = []byte("your-secret-key") // TODO: change to env variable
 // AuthMiddleware проверяет наличие и корректность JWT-токена в заголовке Authorization
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Пропуск статических файлов Swagger
-        // Если путь начинается на "/swagger/", пропускаем без авторизации.
-        if strings.HasPrefix(r.URL.Path, "/swagger/") {
-            next.ServeHTTP(w, r)
-            return
-        }
+		// Исключаем публичные пути
+		publicPaths := []string{
+			"/swagger/",
+			"/health",
+			"/v1/users/register",
+			"/v1/users/login",
+		}
+        for _, path := range publicPaths {
+			if strings.HasPrefix(r.URL.Path, path) {
+				next.ServeHTTP(w, r)
+				return
+			}
+		}
 
 		// Получаем заголовок Authorization
 		authHeader := r.Header.Get("Authorization")
