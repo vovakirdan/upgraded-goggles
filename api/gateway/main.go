@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 
+	"upgraded-goggles/internal/logger"
+
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 )
@@ -19,6 +21,11 @@ func Run() {
 	cfg, err := LoadConfig()
 	if err != nil {
 		log.Fatalf("failed to load config: %v", err)
+	}
+
+	// Инициализируем логгер, записывающий логи в файл "logs/app.log".
+	if err := logger.InitLogger("logs/app.log"); err != nil {
+		log.Fatalf("Failed to initialize logger: %v", err)
 	}
 
 	// Создаем gRPC Gateway mux
@@ -39,6 +46,9 @@ func Run() {
 	// Оборачиваем mux авторизационным middleware
 	handler := AuthMiddleware(mux)
 
+	// Оборачиваем handler middleware логирования.
+	handler = logger.LoggingMiddleware(handler)
+	
 	log.Printf("Starting API Gateway at %s", cfg.HTTPPort)
 	if err := http.ListenAndServe(cfg.HTTPPort, handler); err != nil {
 		log.Fatalf("failed to start server: %v", err)
