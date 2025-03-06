@@ -1,9 +1,11 @@
 package logger
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -13,11 +15,19 @@ var Logger *log.Logger
 // InitLogger инициализирует глобальный логгер, записывающий логи в указанный файл.
 // logFilePath - путь к файлу логов, например "logs/app.log"
 func InitLogger(logFilePath string) error {
+	// Определяем директорию из пути файла
+	dir := filepath.Dir(logFilePath)
+	// Создаем директорию, если её нет
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return fmt.Errorf("failed to create log directory: %w", err)
+	}
+
 	// Открываем или создаем файл для логов
 	file, err := os.OpenFile(logFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		return err
 	}
+
 	// Инициализируем глобальный логгер с метками времени и указанием файла
 	Logger = log.New(file, "", log.LstdFlags|log.Lshortfile)
 	Logger.Println("Logger initialized")

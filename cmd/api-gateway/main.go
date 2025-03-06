@@ -1,10 +1,11 @@
-package gateway
+package main
 
 import (
 	"context"
 	"log"
 	"net/http"
 
+	"upgraded-goggles/api/gateway"
 	"upgraded-goggles/internal/logger"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -13,13 +14,13 @@ import (
 )
 
 // Run запускает API Gateway
-func Run() {
+func main() {
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
 	// Загружаем конфигурацию
-	cfg, err := LoadConfig()
+	cfg, err := gateway.LoadConfig()
 	if err != nil {
 		log.Fatalf("failed to load config: %v", err)
 	}
@@ -36,7 +37,7 @@ func Run() {
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	// Регистрируем маршруты для gRPC-сервисов
-	err = RegisterRoutes(ctx, mux, cfg, opts)
+	err = gateway.RegisterRoutes(ctx, mux, cfg, opts)
 	if err != nil {
 		log.Fatalf("failed to register routes: %v", err)
 	}
@@ -45,7 +46,7 @@ func Run() {
 	http.Handle("/swagger/", http.StripPrefix("/swagger/", http.FileServer(http.Dir("./swagger"))))
 
 	// Оборачиваем mux авторизационным middleware
-	handler := AuthMiddleware(mux)
+	handler := gateway.AuthMiddleware(mux)
 
 	// Оборачиваем handler middleware логирования.
 	handler = logger.LoggingMiddleware(handler)

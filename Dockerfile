@@ -15,7 +15,7 @@ COPY . .
 # Собираем бинарники для каждого сервиса
 RUN CGO_ENABLED=0 GOOS=linux go build -o user-service ./cmd/user-service/main.go
 RUN CGO_ENABLED=0 GOOS=linux go build -o post-service ./cmd/post-service/main.go
-RUN CGO_ENABLED=0 GOOS=linux go build -o api-gateway ./api/gateway/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -o api-gateway ./cmd/api-gateway/main.go
 
 ##########################
 # Stage 2: User Service Image
