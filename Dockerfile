@@ -40,8 +40,13 @@ ENTRYPOINT ["/app/post-service"]
 FROM alpine:latest AS api-gateway
 RUN apk add --no-cache ca-certificates
 WORKDIR /app
-COPY --from=builder /app/api-gateway .
-# Копируем файлы Swagger UI (если они требуются в образе)
-COPY --from=builder /app/api/gateway/swagger ./swagger
+
+# Копируем бинарник
+COPY --from=builder /app/api-gateway . 
+
+# Копируем папку swagger внутрь /app/api/gateway/swagger
+RUN mkdir -p /app/api/gateway
+COPY --from=builder /app/api/gateway/swagger /app/api/gateway/swagger
+
 EXPOSE 8080
 ENTRYPOINT ["/app/api-gateway"]

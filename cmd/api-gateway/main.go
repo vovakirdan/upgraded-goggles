@@ -43,7 +43,7 @@ func main() {
 	}
 
 	// Обслуживание статических файлов Swagger (доступно по /swagger/)
-	http.Handle("/swagger/", http.StripPrefix("/swagger/", http.FileServer(http.Dir("./swagger"))))
+	http.Handle("/swagger/", http.StripPrefix("/swagger/", http.FileServer(http.Dir("api/gateway/swagger"))))
 
 	// Оборачиваем mux авторизационным middleware
 	handler := gateway.AuthMiddleware(mux)
