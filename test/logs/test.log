@@ -1,3 +1,6 @@
 2025/03/06 17:34:58 logger.go:33: Logger initialized
 2025/03/06 17:34:58 service.go:44: Post created: 1
 2025/03/06 17:34:58 service.go:57: User registered: test@example.com
+2025/03/06 21:37:51 logger.go:33: Logger initialized
+2025/03/06 21:37:51 service.go:44: Post created: 1
+2025/03/06 21:37:51 service.go:57: User registered: test@example.com

@@ -27,7 +27,7 @@ func TestSwaggerEndpoint(t *testing.T) {
 	handler := http.StripPrefix("/swagger/", http.FileServer(http.Dir(dir)))
 
 	// Формируем тестовый HTTP-запрос
-	req := httptest.NewRequest("GET", "/swagger/index.html", nil)
+	req := httptest.NewRequest("GET", "/swagger/", nil)
 	rec := httptest.NewRecorder()
 
 	handler.ServeHTTP(rec, req)
