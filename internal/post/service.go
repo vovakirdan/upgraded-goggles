@@ -2,6 +2,7 @@ package post
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"upgraded-goggles/internal/logger"
@@ -39,7 +40,11 @@ func (s *service) CreatePost(userID int64, title, content string) (*Post, error)
 	if err := s.repo.CreatePost(post); err != nil {
 		return nil, err
 	}
-	logger.Logger.Printf("Post created: %d", post.ID)
+	if logger.Logger != nil {
+		logger.Logger.Printf("Post created: %d", post.ID)
+	} else {
+		fmt.Printf("Post created: %d, but logger is nil", post.ID)
+	}
 	return post, nil
 }
 

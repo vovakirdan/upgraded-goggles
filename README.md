@@ -4,6 +4,7 @@
 - [Introduction](#introduction)
 - [Project Structure](#project-structure)
 - [Installation & Setup](#installation--setup)
+- [Generate .proto files](#generate-proto-files)
 - [Configuration](#configuration)
 - [Services Overview](#services-overview)
 - [API Gateway](#api-gateway)
@@ -138,6 +139,45 @@ upgraded-goggles/
 5. Verify services:
    ```sh
    curl http://localhost:8080/health
+   ```
+
+--- 
+
+## Generate .proto files
+To generate .proto files, run the following command:
+1. Install `protoc` and `protoc-gen-go` plugins:
+   ```sh
+   go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+   go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+   ```
+2. Generate .proto files:
+   * Common
+   ```bash
+   protoc -I api/proto \
+  --go_out=paths=source_relative:api/proto/common \
+   --go-grpc_out=paths=source_relative:api/proto/common \
+   api/proto/common/common.proto
+   ```
+   * Gateway
+   ```bash
+   protoc -I api/proto \
+   --go_out=paths=source_relative:api/proto/gateway \
+   --go-grpc_out=paths=source_relative:api/proto/gateway \
+   api/proto/gateway/gateway.proto
+   ```
+   * Post
+   ```bash
+   protoc -I api/proto \
+   --go_out=paths=source_relative:api/proto/post \
+   --go-grpc_out=paths=source_relative:api/proto/post \
+   api/proto/post/post.proto
+   ```
+   * User
+   ```bash
+   protoc -I api/proto \
+   --go_out=paths=source_relative:api/proto/user \
+   --go-grpc_out=paths=source_relative:api/proto/user \
+   api/proto/user/user.proto
    ```
 
 ---

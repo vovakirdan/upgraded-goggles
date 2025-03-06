@@ -4,6 +4,7 @@
 - [Введение](#введение)
 - [Структура Проекта](#структура-проекта)
 - [Установка и Настройка](#установка-и-настройка)
+- [Генерация .proto файлов](#генерация-proto-файлов)
 - [Конфигурация](#конфигурация)
 - [Обзор Сервисов](#обзор-сервисов)
 - [API Шлюз](#api-шлюз)
@@ -138,6 +139,47 @@ upgraded-goggles/
    ```sh
    curl http://localhost:8080/health
    ```
+
+--- 
+
+## Генерация .proto файлов
+Для генерации .proto файлов, выполните следующие команды:
+1. Установите плагины `protoc` и `protoc-gen-go`:
+   ```sh
+   go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+   go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+   ```
+2. Сгенерируйте .proto файлы:
+   * Common
+   ```bash
+   protoc -I api/proto \
+  --go_out=paths=source_relative:api/proto/common \
+   --go-grpc_out=paths=source_relative:api/proto/common \
+   api/proto/common/common.proto
+   ```
+   * Gateway
+   ```bash
+   protoc -I api/proto \
+   --go_out=paths=source_relative:api/proto/gateway \
+   --go-grpc_out=paths=source_relative:api/proto/gateway \
+   api/proto/gateway/gateway.proto
+   ```
+   * Post
+   ```bash
+   protoc -I api/proto \
+   --go_out=paths=source_relative:api/proto/post \
+   --go-grpc_out=paths=source_relative:api/proto/post \
+   api/proto/post/post.proto
+   ```
+   * User
+   ```bash
+   protoc -I api/proto \
+   --go_out=paths=source_relative:api/proto/user \
+   --go-grpc_out=paths=source_relative:api/proto/user \
+   api/proto/user/user.proto
+   ```
+
+---
 
 ---
 

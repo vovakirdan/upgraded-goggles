@@ -1,7 +1,7 @@
 package tests
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -31,7 +31,7 @@ func TestSwaggerEndpoint(t *testing.T) {
 	res := rec.Result()
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		t.Fatalf("failed to read response: %v", err)
 	}
